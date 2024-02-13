@@ -1,4 +1,4 @@
-### Operating Systems
+### Operating System
 
 <details>
 <summary>📚 공부한 자료</summary>
