@@ -327,11 +327,12 @@
     - **뮤텍스**는 Locking 메커니즘으로 락을 걸은 쓰레드만이 임계 영역을 나갈때 락을 해제할 수 있다. 하지만 **세마포어**는 Signaling 메커니즘으로 락을 걸지 않은 쓰레드도 signal을 사용해 락을 해제할 수 있다. 세마포어의 카운트를 1로 설정하면 뮤텍스처럼 활용할 수 있다.
 - **이진 세마포어와 뮤텍스의 차이에 대해 설명해 주세요.**
 
-  - Binary Semaphore vs. Mutex
+  <details>
+  <summary>Binary Semaphore vs. Mutex</summary>
 
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b2b6f1d-958d-4919-8f52-6c8b77133337/426e23a4-b8da-4b25-9580-c8feca709cac/Untitled.png)
+  ![Untitled](https://github.com/ddoddii/Computer-Science-Study/assets/95014836/1341d35c-0559-49fe-9020-85fe7d7fe65f)
 
-  -
+  </details>
 
 - **Lock을 얻기 위해 대기하는 프로세스들은 Spin Lock 기법을 사용할 수 있습니다. 이 방법의 장단점은 무엇인가요? 단점을 해결할 방법은 없을까요?**
 
