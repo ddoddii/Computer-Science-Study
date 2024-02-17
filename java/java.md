@@ -56,17 +56,14 @@ JVM이란 _Java 언어와, Java bytecode 로 컴파일 된 다른 언어들도 �
     - 실행 엔진에는 Garbace Collector(GC) 도 포합되어 있습니다. GC는 JVM 상에서 더 이상 사용되지 않는 데이터가 할당되어있는 메모리를 해제시켜주는 장치입니다. GC가 동작하는 대상은, Heap 영역 내의 객체 중 참조되지 않는 데이터 입니다. GC가 주로 heap 영역을 대상으로 하는 이유는, heap 영역은 모두 공유되기 때문에, 하나의 메소드가 종료되어도 heap 영역의 데이터를 함부로 삭제할 수 없기 때문입니다. GC가 실행될때는 GC를 담당하는 쓰레드를 제외한 모든 쓰레드들은 작동이 일시적으로 정지되게 하는 Stop-the-World 현상이 발생합니다. 따라서 모든 쓰레드가 정지되기 때문에 성능이 저하됩니다. 그래서 적절한 빈도의 GC가 실행되도록 하는 점이 중요합니다.
 
 - **JVM의 Runtime Data Area 영역은 무엇인가요?**
-
   <details>
   <summary>JVM Runtime Data Area </summary>
 
   ![image](https://github.com/ddoddii/Computer-Science-Study/assets/95014836/9c92bb22-9439-4bf5-a40d-a332af92ed0a)
 
-  - 참고
-
-    - [JVM에 관하여 - Part 3, Run-Time Data Area](https://tecoble.techcourse.co.kr/post/2021-08-09-jvm-memory/)
-    - [Chapter 2. The Structure of the Java Virtual Machine](https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-2.html#jvms-2.5.4)
-    </details>
+  - [JVM에 관하여 - Part 3, Run-Time Data Area](https://tecoble.techcourse.co.kr/post/2021-08-09-jvm-memory/)
+  - [Chapter 2. The Structure of the Java Virtual Machine](https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-2.html#jvms-2.5.4)
+  </details>
 
   - JVM Runtime Data Area 에는 크게 Method Area, Heap, JVM Stacks, Native Method Stacks, PC registers 가 존재합니다. Method Area, Heap 영역은 모든 쓰레드가 공유하고, JVM Stacks, PC registers ,Native Method Stacks 는 쓰레드 별로 생성되고 해당 쓰레드가 종료될 때 소멸됩니다.
   - **Method Area**는 정적 영역이라고 부르는 메모리입니다. Method Area 는 JVM 이 시작될 때 생성됩니다. Method area 는 OS 프로세스의 '텍스트' 영역과 유사합니다. 여기에는 run-time constant pool, 필드와 메서드 데이터, 메서드와 생성자를 위한 코드(클래스와 인스턴스 초기화에서 사용되는 스페셜 메서드) 를 저장합니다.
