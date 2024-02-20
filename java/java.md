@@ -323,3 +323,28 @@ JVM이란 _Java 언어와, Java bytecode 로 컴파일 된 다른 언어들도 �
 - **컴파일 과정에서 static 이 어떻게 처리되는지 설명해 주세요.**
 
 ### 11. 자바에서 `new` 키워드를 사용하면 어떤 일이 일어나나요? 메모리 관점에서 자세히 설명해주세요.
+
+### 12. 자바에서 스레드 풀(Thread Pool) 이란 어떤 것이고 언제 사용하나요?
+
+풀(Pool) 이란 자원을 사용하는 시점에서 메모리에 올리고, 사용을 완료한 이후 메모리에서 해제하는 대신 _이미 사용할 준비가 된 자원을 메모리 위에 일정량 미리 생성해둔 자원의 집합_ 입니다. 자원이 필요한 경우 새로 자원을 생성하는 대신 풀에서 꺼내 사용하고, 사용이 완료된 경우 자원을 해제하는 대신 풀에 다시 반환하는 형태로 사용합니다. 자원을 미리 생성해두면 자원이 필요할 때 자원의 생성, 파괴 비용을 절약할 수 있습니다. 즉, 오버헤드를 줄일 수 있습니다.
+
+쓰레드 풀이란 쓰레드를 미리 생성하고, 작업 요청이 발생할 때 마다 미리 생성된 쓰레드로 해당 작업을 처리하는 방식을 의미합니다. 이때, 작업이 끝난 쓰레드는 종료되지 않으며 다음 작업 요청이 들어올 때까지 대기합니다. 쓰레드 풀을 사용하면 이런 쓰레드 폭증으로 인한 애플리케이션 성능 저하를 방지할 수 있습니다. 쓰레드를 제한된 개수로 생성한 뒤, 들어오는 작업을 작업 큐(task queue)에 채워 넣은뒤 쓰레드 별로 할당하여 작업을 처리합니다.
+
+### 13. Error 와 Exception 의 차이가 무엇인가요?
+
+<details>
+<summary>Error, Exception</summary>
+
+![image](https://github.com/ddoddii/Computer-Science-Study/assets/95014836/a53b853e-5009-40a1-9c16-a051acd15f14)
+
+</details>
+
+자바에서 Error 와 Exception 은 모두 Throwable 클래스를 상속받지만, 사용 목적과 처리 방법에서 중요한 차이가 있습니다.
+
+**오류(Error**)는 시스템이 종료되어야 할 수준의 상황과 같이 수습할 수 없는 심각한 문제를 의미합니다. 프로그래머가 미리 예측하여 방지할 수 없습니다. 오류의 예시로는 `OutOfMemoryError`, `StackOverflowError`, `NoClassDefFoundError` 등이 있습니다. 이들은 시스템 레벨의 예외로, 자원 부족 또는 구성 오류와 같은 심각한 상황을 나타냅니다. 반면 **예외(Exception)**는 개발자가 구현한 로직에서 발생한 실수나 사용자의 영향에 의해 발생합니다. 오류와 달리 개발자가 미리 예측하여 방지할 수 있기 때문에 상황에 맞는 예외처리를 해야 합니다. 예외에는 체크 예외(Checked Exception) 과 언체크 예외(Unchecked Exception) 이 있습니다.
+
+- **체크 예외와 언체크 예외의 차이는 무엇인가요?**
+  - Checked Exception
+    - 컴파일 시점에 체크되는 예외로, `Exception` 클래스를 상속받고, `RuntimeException` 클래스는 상속받지 않는 예외들입니다. `IOException`, `SQLException` 등이 있습니다. Checked Exception은 반드시 try-catch 블록으로 처리하거나, 메서드 시그니처에 throws 키워드를 사용하여 선언해야 합니다.
+  - Unchecked Exception
+    - 런타임에 발생하는 예외로, `RuntimeException` 클래스와 그 하위 클래스들입니다. 프로그램 로직 상 잘못된 부분을 뜻합니다. 예를 들어, , 배열의 인덱스가 범위를 벗어날 때 발생하는 `IndexOutOfBoundsException` , 0으로 나눌 때 발생하는 `ArithmeticException`, 객체의 참조가 null일때 발생하는 `NullPointerException`, 은 메서드에 전달된 인자가 부적절할 때 발생하는 `IllegalArgumentException` 등이 있습니다. Unchecked Exception은 선택적으로 처리할 수 있으며, 프로그램의 버그나 잘못된 사용으로 인해 주로 발생합니다.
