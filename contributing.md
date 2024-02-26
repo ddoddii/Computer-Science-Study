@@ -2,9 +2,9 @@
 
 ## ✨ How To
 
-1. 본인 이름의 브랜치를 생성한다.
-2. 각 주마다 최소 5개 질문에 대한 답을 정리한 후,`main` 브랜치로 pull request 를 생성한다.
-3. 이때 모두가 다른 사람들이 open 한 pull request 에 꼬리 질문 형식으로 comment 를 단다.
+1. 본인 이름의 브랜치를 생성합니다.
+2. 매주 `일요일 자정` 전까지 최소 5개 질문에 대한 답을 정리한 후,`main` 브랜치로 pull request 를 생성합니다.
+3. 이때 모두가 다른 사람들이 open 한 pull request 에 꼬리 질문 형식으로 comment 를 답니다.
 
 ## 🙌 Convention
 
