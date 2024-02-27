@@ -410,3 +410,96 @@ JVM이란 _Java 언어와, Java bytecode 로 컴파일 된 다른 언어들도 �
 
 - **왜 체크 예외는 반드시 try-catch 문으로 처리해야고 언체크 예외는 처리하지 않아도 될까요?**
   - 자바는 과거에는 목적 자체가 서버를 위한 언어는 아니었습니다. 원래는 냉장고, 텔레비전 등 다양한 상황에서 사용하기 위해 만든 언어였습니다. 그러다 보니 예외가 발생했을 때 처리를 강제 해서 메인 함수가 종료되는 문제를 막고 안정성을 높이는 것이 중요했습니다. 따라서 체크 예외에서는 try-catch 를 강제했습니다. 하지만 현재 자바는 서버를 위한 언어로 가장 많이 쓰입니다. 이때도 프레임워크와 같이 사용합니다. 따라서 요즘은 체크 예외를 많이 쓰지 않고 다 런타임 예외로 처리를 하는 추세입니다.
+
+### 14. 자바에서 쓰레드를 생성하는 방법에는 어떤 것들이 있나요?
+
+첫번째 방법은 쓰레드 클래스를 상속받는 것입니다. 자손 클래스는 Thread 클래스의 `run()` 메서드를 오버라이드해야 합니다. 그러면 자손클래스의 객체는 헐당받고 시작할 수 있습니다.
+
+두번째 방법은 `Runnable` 인터페이스를 구현하는 클래스를 선언하고, 이 클래스를 Thread 클래스의 생성자의 매개변수로 제공하는 것입니다.
+
+- **그렇다면 두 방법의 장단점은 무엇인가요?**
+
+  - 쓰레드 클래스를 상속받으면, 쓰레드의 상태관리에 필요한 `start()` , `sleep()`, `join()` 을 바로 사용할 수 있습니다. 하지만 자바는 단일 상속만을 허용하기 때문에 쓰레드 클래스를 상속받으면 다른 클래스를 상속받을 수 없습니다. 또한 Thread 클래스를 상속받으면 Thread 클래스에 구현된 코드들에 의해 더 많은 자원(메모리와 시간 등)을 필요로 하므로 Runnable이 주로 사용됩니다.
+
+- **`Runnable` 인터페이스의 용도는 무엇인가요?**
+  - 쓰레드를 생성하고 매개변수로 Runnable 타입 객체를 넣으면, 그 안의 `run()` 메서드를 쓰레드 내에서 할 작업으로 처리하겠다는 의미입니다. 즉, Runnable 타입 객체는 `run()` 메서드를 통해 쓰레드에서 할 작업을 지정하는 방법입니다.
+- **왜 Thread 클래스의 `public static native Thread currentThread();` 는 static 으로 선언되어 있나요?**
+  - `currentThread()` 메서드는 현재 쓰레드에 대한 정보를 제공하는 용도입니다. 이 정보는 하나의 Thread 객체 내에 국한되지 않으며, 전체 쓰레드 간 공유됩니다. 따라서 이 메서드를 static으로 접근하는 것이 합리적입니다.
+- **쓰레드의 `start()` 과 `run()` 메서드는 어떤 차이가 있나요?**
+  - main 메서드에서 `run()`을 호출하는 것은 새로 쓰레드를 생성하는 것이 아닌, 현재 실행하고 있는 메인 쓰레드에서 단순히 `run()` 함수를 호출하는 것입니다. 반면, `start()` 는 새로운 쓰레드가 작업을 실행하는데 필요한 호출스택(call stack)을 생성한 다음 JVM이 `run()` 을 호출해서, 생성된 호출스택에 `run()` 이 첫번째로 올라가게 합니다.
+- **아래 코드의 결과는 어떻게 될까요?**
+
+  ```java
+  class MyRunnable implements Runnable{
+    public void run(){
+      System.out.println("My Runnable is running");
+      Thread currThread = Thread.currentThread();
+      currThread.setName("thread in run method");
+      System.out.println("Current thread in run : " + currThread.getName());
+    }
+  }
+
+  class TestRunnable {
+    public static void main(String[] args) {
+      Thread thread = new Thread(new MyRunnable());
+      thread.run();
+      System.out.println("Current thread in main : " + Thread.currentThread().getName());
+    }
+  }
+  ```
+
+  - 실행과정을 보면, main 메서드가 메인 쓰레드에서 실행됩니다. 그 후 `MyRunnable` 이 target 인 새로운 쓰레드를 만들지만, thread.start() 를 통해 새로운 쓰레드를 시작하는 것이 아니라 단순히 새로운 쓰레드의 `run()` 메서드를 호출합니다. 따라서 `run()` 메서드 또한 메인 쓰레드에서 실행되며, `setName()` 에 의해 메인 쓰레드의 이름이 바뀌게 됩니다. 따라서 결과는 아래와 같이 나타납니다.
+
+  ```text
+  My Runnable is running
+  Current thread in run: thread in run
+  Current thread in main : thread in run
+  ```
+
+- **새로 생성된 쓰레드의 호출 스택은 언제 사라질까요?**
+  - 새로운 호출 스택이 `start()` 에 의해 생기면, 새로운 호출 스택에 `run()` 이 가장 처음 올라가게 됩니다. 만약 `run()` 에서 호출한 함수들의 실행이 모두 끝나고, `run()` 의 수행도 종료되면 쓰레드의 호출스택은 비워지면서 사라지게 됩니다.
+
+### 15. 쓰레드의 상태값에는 어떤 것들이 있나요?
+
+<details>
+<summary>쓰레드의 6가지 상태값</summary>
+
+<img width="800" alt="image" src="https://github.com/ddoddii/Computer-Science-Study/assets/95014836/e48f67e0-4053-42e8-ac39-040190e38e9f">
+
+</details>
+
+쓰레드는 **New, Runnable, Blocked, Waiting, Time_Waiting, Terminated** 6가지 상태값이 있습니다.
+
+- `NEW` : 쓰레드가 생성되고 아직 시작되지 않은 상태 (=아직 start() 가 호출되지 않은 상태)
+- `RUNNABLE` : 쓰레드가 실행 중 또는 실행 가능한 상태
+- `BLOCKED` : 동기화 블럭에 의해 일시정지된 상태 (lock 이 풀릴 때까지 기다리는 상태)
+- `WAITING` : 다른 쓰레드가 어떤 액션을 취하길 무한정으로 기다리는 상태 (=다른 쓰레드가 notify(), nofifyAll() 하기를 기다림)
+- `TIME_WAITING` : 다른 쓰레드가 어떤 액션을 취하길 기다리지만 기다리는 시간이 지정되어 있는 상태
+- `TERMINATED` : 쓰레드의 작업이 종료된 상태
+
+- **`WAITING` 과 `BLOCKED` 의 차이는 무엇인가요?**
+  - `WAITING` 과 `BLOCKED` 모두 쓰레드가 일시 정지한 상태이지만, 원인이 다릅니다.
+  - `WAITING` 상태의 쓰레드는 다른 쓰레드의 특정 액션을 기다리고 있습니다. 이 상태의 쓰레드는 특정 조건이 만족될 때까지 계속해서 대기합니다. `Object.wait()`, `Thread.join()` 를 호출하면 이 상태에 진입합니다.
+  - 반면 `BLOCKED` 는 synchronized 블록이나 메서드에 진입하려고 시도할 때, 해당 락이 다른 쓰레드에 의해 보유되고 있으면 발생합니다. `BLOCKED` 상태의 쓰레드는 락을 보유하고 있는 쓰레드가 락을 해제할 때까지 기다립니다. 락이 해제되면, 대기하고 있는 쓰레드 중 하나가 락을 획득하고 RUNNABLE 상태가 됩니다.
+- **왜 `sleep()` 과 `yield()` 는 static 메서드인가요?**
+  - `sleep()` 과 `yield()` 는 둘 다 현재 실행 중인 쓰레드에 대해 작동합니다.
+- **`yield()` 과 `join()` 의 차이점은 무엇인가요?**
+  - `yield()` 는 현재 쓰레드가 다른 쓰레드에게 CPU 를 양보하고 싶을 때 사용합니다. 하지만 이 스케쥴러는 이 힌트를 무시할 수 도 있습니다.
+  - `join()` 은 한 쓰레드가 다른 쓰레드의 종료를 기다리고 싶을 때 사용합니다. 예를 들어, 쓰레드 A에서 threadB.join()을 호출하면, 쓰레드 A는 쓰레드 B가 종료될 때까지 기다립니다.
+- **`sleep()` 과 `wait()` 의 차이점과 공통점은 무엇인가요?**
+  - `sleep(long millis)` 은 Thread 클래스에 있는 메서드로, 현재 실행 중인 쓰레드를 일정 시간동안 멈추게 합니다. 이때 **객체에 대한 monitor 을 잃지 않습니다**. `interrupt()` 또는 일정 시간이 지나면 다시 `RUNNABLE` 상태로 돌아옵니다.
+  - `wait()` 은 Object 클래스에 있는 메서드로, 동기화 블록 내에서만 사용할 수 있으며 보다 효율적인 동기화를 가능하게 하기 위한 용도입니다. 동기화된 임계 영역의 코드를 수행하다 더 이상 작업을 진행할 상황이 아니라면, `wait()` 를 호출하여 **쓰레드가 락을 반납**하고 기다립니다. `notify()`, `notifyAll()` 또는 일정 시간이 지나면 다시 `RUNNABLE` 상태로 돌아옵니다.
+
+### 16. 쓰레드의 동기화는 무엇이며, 동기화에 사용되는 방법들은 어떤 것이 있나요?
+
+쓰레드의 동기화(synchronization) 란 **한 쓰레드가 진행 중인 작업을 다른 쓰레드가 간섭하지 못하도록 막는 것**입니다. `synchronized` 를 이용한 방법, `wait()`와 `notify()` 를 이용한 방법, `java.util.concurrent.locks` 와 `java.util.concurrent.atomic` 패키지를 이용한 방법이 있습니다.
+
+- **`synchronized` 에 의한 방법은 무엇이며, 어떤 장단점이 있을까요?**
+  - 가장 간단한 방법으로, `synchronized` 를 사용하여 임계 영역(critical section)을 설정합니다. 쓰레드는 `synchronized` 블럭 내 객체의 lock 을 얻어 작업을 수행하다가 메서드가 종료되면 lock 을 반납합니다. lock 의 획득과 반납이 자동적으로 이루어지므로 간편하다는 장점이 있습니다. 하지만 만약 네트워크 I/O 를 기다리는 경우와 같이 객체가 락을 보유한 상태로 오랜 시간을 보낼 수 도 있다는 단점이 있습니다.
+- **`wait()`와 `notify()` 를 이용한 방법은 무엇이며, 어떤 장단점이 있을까요?**
+  - 위의 `synchronized` 의 단점을 보완하기 위한 방법이며, 동기화된 임계 영역의 코드를 수행하다가 작업을 더 이상 진행할 상황이 아니면 `wait()` 를 호출하여 쓰레드가 락을 반납하고 기다립니다. 나중에 작업을 다시 진행할 수 있는 상황이 되면 `notify()` 를 호출해서 작업을 중단했던 쓰레드가 다시 락을 얻어 작업을 진행합니다.
+  - `notify()` 가 호출되면, 해당 객체의 waiting pool 내에 있는 모든 쓰레드 중 임의의 쓰레드만 통지를 받습니다. 이때 계속 기다리는 쓰레드가 생기는 기아 현상(starvation) 이 발생할 수 있습니다. 이 때문에 `notifyAll()` 는 해당 객체의 waiting pool 내에 있는 모든 쓰레드에게 통지하지만, 모든 쓰레드가 lock 을 얻기 위해 서로 경쟁하는 경쟁 상태(race condition) 을 발생시킬 수 있습니다.
+- **`java.util.concurrent.locks` 에 있는 Lock 과 Condition 은 위의 문제들을 어떻게 해결했나요?**
+  - 특정 쓰레드들을 위한 Condition 들을 구분합니다. 예를 들어, 쓰레드A 를 위한 conditionA 를 생성하고, 쓰레드B 를 위한 conditionB 를 생성한 후, `await()` 과 `signal()` 을 통해 통지의 대상을 구분할 수 있습니다.
+- **`volatile` 키워드는 어떻게 변수에 대한 읽기와 쓰기를 동기화하나요?**
+  - `volatile` 키워드를 붙이면, 코어가 변수의 값을 읽어올 때 바로 메모리에서 읽어오기 때문에 캐시와 메모리 간 변수 값이 일치하지 않을 때 생기는 불일치를 방지할 수 있습니다.
