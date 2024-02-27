@@ -119,3 +119,56 @@
 - **`StackOverflowError` 는 어떤 경우에 발생하나요?**
 
 - **왜 체크 예외는 반드시 try-catch 문으로 처리해야고 언체크 예외는 처리하지 않아도 될까요?**
+
+### 14. 자바에서 쓰레드를 생성하는 방법에는 어떤 것들이 있나요?
+
+- **그렇다면 두 방법의 장단점은 무엇인가요?**
+
+- **`Runnable` 인터페이스의 용도는 무엇인가요?**
+
+- **왜 Thread 클래스의 `public static native Thread currentThread();` 는 static 으로 선언되어 있나요?**
+
+- **쓰레드의 `start()` 과 `run()` 메서드는 어떤 차이가 있나요?**
+
+- **아래 코드의 결과는 어떻게 될까요?**
+
+  ```java
+  class MyRunnable implements Runnable{
+    public void run(){
+      System.out.println("My Runnable is running");
+      Thread currThread = Thread.currentThread();
+      currThread.setName("thread in run method");
+      System.out.println("Current thread in run : " + currThread.getName());
+    }
+  }
+
+  class TestRunnable {
+    public static void main(String[] args) {
+      Thread thread = new Thread(new MyRunnable());
+      thread.run();
+      System.out.println("Current thread in main : " + Thread.currentThread().getName());
+    }
+  }
+  ```
+
+- **새로 생성된 쓰레드의 호출 스택은 언제 사라질까요?**
+
+### 15. 쓰레드의 상태값에는 어떤 것들이 있나요?
+
+- **`WAITING` 과 `BLOCKED` 의 차이는 무엇인가요?**
+
+- **왜 `sleep()` 과 `yield()` 는 static 메서드인가요?**
+
+- **`yield()` 과 `join()` 의 차이점은 무엇인가요?**
+
+- **`sleep()` 과 `wait()` 의 차이점과 공통점은 무엇인가요?**
+
+### 16. 쓰레드의 동기화는 무엇이며, 동기화에 사용되는 방법들은 어떤 것이 있나요?
+
+- **`synchronized` 에 의한 방법은 무엇이며, 어떤 장단점이 있을까요?**
+
+- **`wait()`와 `notify()` 를 이용한 방법은 무엇이며, 어떤 장단점이 있을까요?**
+
+- **`java.util.concurrent.locks` 에 있는 Lock 과 Condition 은 위의 문제들을 어떻게 해결했나요?**
+
+- **`volatile` 키워드는 어떻게 변수에 대한 읽기와 쓰기를 동기화하나요?**
