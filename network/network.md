@@ -108,8 +108,18 @@
 ### **13. [www.github.com을](http://www.github.xn--com-of0o/) 브라우저에 입력하고 엔터를 쳤을 때, 네트워크 상 어떤 일이 일어나는지 최대한 자세하게 설명해 주세요.**
 
 - **DNS 쿼리를 통해 얻어진 IP는 어디를 가리키고 있나요?**
+Answer: www.github.com의 웹 서버를 가리킵니다.
 - **Web Server와 Web Application Server의 차이에 대해 설명해 주세요.**
+Answer: 웹 서버는 클라이언트에게 정적인 파일(html, css, 이미지 등)을 제공하는 역할을 합니다. 대표적으로 아파치(Apache), 엔진엑스(Nginx) 등이 있습니다.
+WAS는 동적인 컨텐츠를 생성하고 데이터를 처리하는 역할을 합니다. 예를 들면 데이터베이스 조회, 비즈니스 로직 처리 등을 WAS가 하게 되고 그에 따라 생성된 동적 컨텐츠를 클라이언트에게 제공합니다.
+WAS는 정적, 동적 요청 처리가 모두 가능합니다. 하지만 정적 데이터 요청까지 WAS가 처리하는 것은 WAS에 과부하를 주어 비효율적입니다. 따라서 웹 서버를 앞단에 두고 정적 콘텐츠 요청을 처리하고, WAS는 웹 서버가 처리할 수 없는 서버 사이드 코드의 로직을 수행하도록 해야합니다.
+
 - **URL, URI, URN은 어떤 차이가 있나요?**
+Answer:
+URI(Uniform Resource Identifier)는 인터넷 상의 리소스를 고유하게 식별하는 문자열입니다. URL과 URN은 URI의 하위 개념입니다.
+URL(Uniform Resource Locator)는 네트워크 상에서 리소스가 어디에 위치하고 있고 어떻게 얻을 수 있는지에 대한 정보를 나타냅니다. HTTP 프로토콜 뿐만 아니라 FTP, SMTP 등 다른 프로토콜에서도 사용할 수 있습니다.
+URN은 http 같은 프로토콜을 제외하고 리소스의 이름으로 리소스를 특정하는 표기 방식입니다. URN에는 리소스 접근 방법과 웹 상의 위치가 표기되어 있지 않기 때문에, 리소스를 찾기 위해서는 URN을 URL로 변환하여 사용해야합니다.
+예를 들어, "https://myblog.com/cs/network.html#posts"이라는 문자열이 있다면, 여기서 전체 문자열은 URL에 해당하고, 위치까지를 나타내는 "https://myblog.com/cs/network.html"는 URL에, 프로토콜을 빼고 자원을 특정하는 "myblog.com/cs/network.html#posts"는 URN에 해당합니다.
 
 ### **14. DNS에 대해 설명해 주세요.**
 
