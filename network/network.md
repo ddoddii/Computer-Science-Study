@@ -208,7 +208,15 @@ H
 - **TLS 기술은 무엇인가요?**
 
 ### **23. REST API 는 무엇인가요?**
-
+  Answer:
+  REST API를 이해하기 위해선 REST에 대한 설명이 필요합니다. REST(Representational State Transfer)란 HTTP URI를 통해 자원을 명시하고, HTTP Method(POST, GET, PUT, DELETE, PATCH) 등을 통해 해당 URI가 가리키는 자원에 대해 CRUD Operation을 적용하는 것을 말합니다.
+  REST API란 REST의 원리를 따르는 API를 의미합니다. REST API를 올바르게 설계하기 위해서는 지켜야하는 몇가지 규칙이 있습니다.
+  - URI는 동사보다는 명사를, 대문자 보다는 소문자를 써야합니다.
+  - URI의 마지막에 '/'를 넣지 않습니다
+  - URI는 언더바 대신 하이픈을 사용합니다.
+  - 파일확장자(.jpg 등)는 URI에 포함시키지 않습니다.
+  - URI에는 행위를 포함시키지 않습니다.(예를들어 '.../delete-post/1' 이라고 할 필요없이 '.../post/1' 이런식으로 작성합니다.)
+  
 ### **24. 토큰 기반 인증 과 쿠키 / 세션 이용한 인증의 차이는 무엇인가요?**
 
 ### **25. OpenAI API 를 stream 방식으로 사용한다면, 서버와 클라이언트는 어떤 프로토콜을 사용하여 통신하는 것이 좋을까요?⭐️**
