@@ -457,7 +457,18 @@ JVM이란 _Java 언어와, Java bytecode 로 컴파일 된 다른 언어들도 �
   ```
 
 - **새로 생성된 쓰레드의 호출 스택은 언제 사라질까요?**
+
   - 새로운 호출 스택이 `start()` 에 의해 생기면, 새로운 호출 스택에 `run()` 이 가장 처음 올라가게 됩니다. 만약 `run()` 에서 호출한 함수들의 실행이 모두 끝나고, `run()` 의 수행도 종료되면 쓰레드의 호출스택은 비워지면서 사라지게 됩니다.
+
+- **`Callable` 과 `Runnable` 의 차이는 무엇인가요? 왜 `Callable` 과 `Future` 인터페이스가 생겼나요?**
+
+  - Thread 과 Runnable 을 직접 사용하는 방식은 한계점이 있었습니다. 쓰레드를 생성할 때 지나치게 저수준의 API에 의존했고, 값의 반환이 불가능합니다. 또한 매번 쓰레드 생성과 종료하는 오버헤드가 발생했고 쓰레드들의 관리가 어려웠습니다. 따라서 제네릭을 사용해 결과를 받을 수 있는 `Callable` 인터페이스가 추가되었습니다.
+  - `Callable` 과 `Runnable` 둘 다 구현한 클래스의 인스턴스가 스레드에 의해 실행되게끔 설계되었다는 공통점이 있습니다. 그러나 `Runnable`은 결과를 반환하지 않으며 체크 예외를 던질 수 없습니다. 반면 `Callable`은 결과를 반환하며, 체크 예외를 발생시킬 수 있습니다.
+
+- **`ExecutorService`, `Future` 는 각각 무엇이며 어떤 용도로 쓰이나요?**
+
+  - `ExecutorService`는 자바에서 스레드풀을 생성하고 사용하는 간단한 방법을 제공합니다. `ExecutorService` 에 Task만 지정해주면 알아서 쓰레드풀을 이용해서 Task를 실행하고 관리합니다.
+  - `Future` 인터페이스는 별도의 스레드에서 실행 중인 비동기 계산의 결과를 나타냅니다. 계산이 완료되었는지 확인하고, 계산 결과를 검색하거나, 필요한 경우 계산을 취소할 수 있는 방법을 제공합니다. 작업이 `ExecutorService`에 제출되면 작업의 결과를 나타내는 `Future` 객체를 반환합니다.
 
 ### 15. 쓰레드의 상태값에는 어떤 것들이 있나요?
 
@@ -592,6 +603,17 @@ public class FunctionalExample {
   }
   ```
 
+  <details>
+  <summary>자바에서 제공하는 함수형 인터페이스</summary>
+
+  <img width="1117" alt="image" src="https://github.com/ddoddii/Computer-Science-Study/assets/95014836/b94d6027-4df8-4429-bf42-61da6a4b1c45">
+
+  <img width="1060" alt="image" src="https://github.com/ddoddii/Computer-Science-Study/assets/95014836/5eac1464-b98b-47f4-beb0-610952eb3289">
+
+  출처 : [함수형 인터페이스 표준 API 총정리](https://inpa.tistory.com/entry/%E2%98%95-%ED%95%A8%EC%88%98%ED%98%95-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4-API)
+
+  </details>
+
 ### 19. 자바에서 I/O가 느린이유는 무엇인가요?
 
 - **운영체제에서 I/O는 어떻게 동작하나요?**
@@ -628,3 +650,77 @@ public class FunctionalExample {
 - **그러면 IO 가 무조건 나쁜 것일까요?**
 
   - IO, NIO 각각의 trade-off가 있습니다. 만약 연결 클라이언트 수가 적고 전송되는 데이터가 대용량이며 순차적으로 처리될 필요성이 있는 경우 IO 로 서버를 구현하는 것이 좋습니다. 반면 NIO는 클라이언트 수가 많고, 하나의 입출력 처리 작업이 오래 걸리지 않는 경우 유리합니다.
+
+### 20. 쓰레드풀, 커넥션풀 등 여러 Pool 이 있는데, 이들의 용도는 무엇일까요?
+
+- Thread pool을 사용하면 스레드 생성 및 소멸과 관련된 오버헤드를 줄이고 애플리케이션에서 실행되는 스레드 수를 제어하는 등 여러 가지 이점을 얻을 수 있습니다. 자바에서 스레드는 운영체제의 리소스인 시스템 수준 스레드에 매핑되는데, 스레드를 제어할 수 없을 정도로 많이 생성하면 이러한 리소스가 빠르게 부족해질 수 있습니다.
+
+### 21. 쓰레드 로컬(Thread Local) 은 무엇인가요?
+
+여러개의 스레드가 존재할 때, **각 스레드 별로 필요한 정보를 저장할 수 있는 특별한 저장소**입니다. ThreadLocal 클래스는 오직 한 스레드에 의해 읽고/쓰여질 수 있는 변수를 생성합니다. 각각의 스레드는 살아있는 한 ThreadLocal에 접근할 수 있는 암묵적인 참조를 가집니다. 스레드가 종료되면 스레드 로컬 인스턴스들의 모든 복사본들은 GC의 대상이 됩니다.
+
+가령 Thread A 가 ThreadLocal 변수( tLocal ) 에 접근하여 a 라는 문자를 저장한다고 합시다. 동시에 Thread B 에서 마찬가지로 tLocal 변수에 접근하여, b 라는 문자값을 저장한다고 할때, a 라는 문자를 b 가 덮어 버리는 것이 아니라, 각 스레드별 전용 저장소에 각각의 값이 저장됩니다. 즉 멀티 스레드 환경에서 공유 자원의 동시성 문제를 해결할 수 있게 되는 것입니다.
+
+- **상속가능한 스레드 로컬(Inheritable ThreadLocal) 은 무엇인가요?**
+
+  - `Inheritable ThreadLocal` 클래스는 `ThreadLocal` 클래스를 확장하며, 부모 스레드에서 자식 스레드로 값을 상속할 수 있도록 합니다. 자식 스레드가 만들어졌을 때, 자식 스레드는 부모가 가지고 있는 상속 가능한 스레드 로컬 값들을 모두 물려 받습니다. 보통은 부모 스레드와 값이 같지만, 자식의 값을 오버라이딩할 수 도 있습니다.
+
+- **상속가능한 스레드 로컬(Inheritable ThreadLocal) 은 왜 필요한가요?**
+
+  - 요청을 처리하는 스레드가 오랜 특정 작업 때문에 기간 동안 점유되어 스레드 풀로 반환되지 않는다면 동시성이 떨어지게 됩니다. 이러한 문제를 해결하기 위해 요청의 작업들 중 일부는 비동기로 실행되도록 백그라운드 스레드로 위임시킬 수 있습니다. 그러면 백그라운드 스레드에서는 스레드 로컬에 저장된 값이 없게 되므로 문제가 생길 수 있으므로, 자바는 자식 스레드에게 스레드 로컬의 값을 위임시켜주는 상속 가능한 스레드 로컬(Inheritable ThreadLocal)을 제공하고 있습니다.
+
+### 22. Stream 에서 Map,flatMap 과 Optional 에서 Map, flatMap의 차이는 무엇인가요?
+
+- **Stream**
+
+  - map
+
+    - 스트림의 각 요소들에 Function 을 적용시키고,그 결과를 스트림의 형태로 반환합니다.
+    - `<R> Stream<R> map(Function<? super T, ? extends R> mapper);`
+
+  - flatMap
+
+    - flatMap은 중첩된 스트림 구조를 한 단계 제거하고 하나의 스트림으로 단순화하는 역할을 합니다.
+    - `<R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);`
+
+      ```java
+      List<List<String>> listOfLists = Arrays.asList(
+        Arrays.asList("a", "b"),
+        Arrays.asList("c", "d")
+      );
+      Stream<String> flatStream = listOfLists.stream().flatMap(List::stream); // 모든 내부 리스트의 요소를 하나의 스트림으로 합칩니다.
+      ```
+
+- **Optional**
+
+  - map
+
+    - 스트림의 map과 동일한 형태로 다른 값으로 변환하는 과정입니다.
+
+    ```java
+    public <U> Optional<U> map(Function<? super T, ? extends U> mapper) {
+          Objects.requireNonNull(mapper);
+          if (!isPresent()) {
+              return empty();
+          } else {
+              return Optional.ofNullable(mapper.apply(value));
+          }
+      }
+    ```
+
+  - flatMap
+
+    - Optional의 `flatMap` 메소드는 Optional 객체의 값이 존재할 경우, 그 값을 사용하여 새로운 Optional 객체를 생성하는 함수를 적용하고, 그 결과를 반환합니다. 이 메소드는 중첩된 Optional 객체를 단일 Optional 객체로 평탄화할 때 사용됩니다.
+
+    ```java
+    public <U> Optional<U> flatMap(Function<? super T, ? extends Optional<? extends U>> mapper) {
+          Objects.requireNonNull(mapper);
+          if (!isPresent()) {
+              return empty();
+          } else {
+              @SuppressWarnings("unchecked")
+              Optional<U> r = (Optional<U>) mapper.apply(value);
+              return Objects.requireNonNull(r);
+          }
+      }
+    ```
