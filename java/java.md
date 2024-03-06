@@ -724,3 +724,52 @@ public class FunctionalExample {
           }
       }
     ```
+
+### 23. 자바의 Servlet 이란 무엇인가요?
+
+서블릿은 javax.servlet.Servlet 인터페이스로 구현된 자바 프로그램으로 사용자의 요청에 따라 동적인 컨텐츠를 제공해줍니다. 서블릿은 각 요청마다 프로세스가 아닌 쓰레드를 생성하여 요청을 처리합니다.
+
+자바로 구현되어 있기 때문에 플랫폼에 독립적이며, JVM에 의해 관리되기 때문에 GC나 Memory Leak 에 대한 걱정을 덜 수 있습니다.
+
+<details>
+<summary>서블릿</summary>
+
+- CGI vs. Servlet
+  <img width="734" alt="image" src="https://github.com/ddoddii/Computer-Science-Study/assets/95014836/e40669e0-fbac-428e-aaac-bd716be96340">
+
+출처 : [Servlet, Tomcat, Apache, Nginx.. 이게 다 뭘까](https://medium.com/naverfinancial/servlet-tomcat-apache-nginx-%EC%9D%B4%EA%B2%8C-%EB%8B%A4-%EB%AD%98%EA%B9%8C-384cdeb9ad5)
+
+- 서블릿 동작 방식
+
+<img width="673" alt="image" src="https://github.com/ddoddii/Computer-Science-Study/assets/95014836/69872357-ece7-4a8e-9cd8-dac604c893cb">
+
+출처 : [[JSP] 서블릿(Servlet)이란?](https://mangkyu.tistory.com/14)
+
+</details>
+
+- **서블릿이 위치해있는 Web Container가 클라이언트 요청을 어떻게 처리하나요?**
+
+  1. 사용자가 서블릿을 필요로 하는 특정 URL에 해당하는 HTTP 요청을 보냅니다.
+  2. 컨테이너(=Web container)는 요청 URL을 처리하기 위해서 서블릿이 필요하다는 것을 확인합니다.
+  3. 컨테이너가 `HttpServletRequest`와 `HttpServletResponse`라는 객체를 생성합니다.
+  4. 컨테이너가 요청 URL에 맵핑되는 서블릿을 찾고, 요청을 처리하기 위한 쓰레드를 생성(또는 할당 allocate)한 후, 앞서 만든 request 와 response 객체를 서블릿 쓰레드에 전달합니다.
+  5. 컨테이너는 서블릿의 service() 메서드를 호출하고, 메서드 수행이 완료되면 컨테이너는 사용자에게 HTTP 응답을 반환합니다.
+
+- **Web Container 란 무엇인가요?**
+
+  - Web Container는 Web Application Server 내에서 동적인 컨텐츠를 제공해줍니다. WAS는 웹 서버와 웹 컨테이너를 포함하고 있는 개념으로, 동적 컨텐츠에 대한 요청이 들어왔을 때 `Web server -> Web container -> Servlets -> Web container -> Web server` 같은 흐름으로 클라이언트에게 응답을 반환합니다.
+  - 클라이언트가 웹서버에 HTTP 요청을 보내면, 웹 컨테이너가 이 요청을 받아서 요청 URL에 해당하는 서블릿에 전달하며, 서블릿 쓰레드가 사용자의 요청을 처리한 후 웹 컨테이너를 통해 응답을 반환합니다.
+
+  <details>
+  <summary>WAS의 구조</summary>
+
+  <img width="710" alt="image" src="https://github.com/ddoddii/Computer-Science-Study/assets/95014836/6aa9eeee-bc42-4ba8-ad59-adafba82f434">
+
+  </details>
+
+- **Tomcat 이란 무엇인가요?**
+
+  - 서블릿 컨테이너를 포함하고 있는 Web Application Server 입니다. 웹 서버와 연동하여 실행할 수 있는 자바 환경을 제공하여 JSP와 자바 서블릿을 실행할 수 있는 환경을 제공합니다. 톰캣은 웹 서버 자체를 내장합니다.
+
+- **JSP(Java Server Pages)란 무엇인가요?**
+  - JSP는 HTML 내에 자바 코드를 삽입할 수 있게 하는 서버 측 스크립팅 기술입니다. 사용자 요청에 동적으로 반응하여 HTML, XML 또는 다른 문서 유형을 생성하고 클라이언트에게 제공합니다.
