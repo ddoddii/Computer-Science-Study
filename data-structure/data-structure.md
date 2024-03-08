@@ -188,10 +188,60 @@ https://jooyoung1121.github.io/cs/data%20structure/sort/
 
 ### **11. 재귀함수에 대해 설명해 주세요.**
 
+&nbsp;컴퓨터 과학에서 재귀란 자신을 정의할 때 자기 자신을 재참조하는 방법을 의미합니다. 재귀의 정의대로 재귀 함수란 함수에서 자기 자신을 호출해 작업을 수행하는 함수입니다.
+![alt text](image-2.png)
 
+출처: https://ko.wikipedia.org/wiki/%EC%9E%AC%EA%B7%80_(%EC%BB%B4%ED%93%A8%ED%84%B0_%EA%B3%BC%ED%95%99)
 
 - **재귀 함수의 동작 과정을 Call Stack을 활용해서 설명해 주세요.**
+
+&nbsp;재귀는 함수를 호출하기 때문에 스택에 쌓이게 됩니다. 스택에 쌓인다는 것은 메모리에 함수에 대한 정보(입력값, 결과값, 리턴 후 돌아갈 위치 등)가 할당된다는 것으로 함수의 호출이 많아질수록 메모리 공간이 부족해지게 됩니다. 이 경우 스택 오버플로우(stack overflow)가 발생할 수 있습니다. 따라서, 반드시 종료 조건을 생성해줘서 무한 반복에 빠지지 않도록 해줘야 합니다. 스택에 함수가 계속 쌓이다가 종료 조건을 만나게 되면 콜스택에 저장된 함수가 실행되며 결과를 확인할 수 있습니다.
+
+![alt text](image-3.png)
+
+출처: https://catsbi.oopy.io/dbcc8c79-4600-4655-b2e2-b76eb7309e60
+
 - **언어의 스펙에 따라, 재귀함수의 최적화를 진행해주는 경우가 있습니다. 어떤 경우에 재귀함수의 최적화가 가능하며, 이를 어떻게 최적화 할 수 있을지 설명해 주세요.**
+
+&nbsp;재귀 함수의 오버헤드가 크기 때문에 이를 해결하기 위해 꼬리 재귀라는 방법을 사용합니다. 재귀 함수의 최적화가 가능한 경우는 기존의 재귀 함수를 꼬리 재귀 방식으로 구현하는 것과 컴파일러가 꼬리 재귀 최적화를 지원하는 것입니다.
+
+&nbsp;꼬리 재귀란 재귀 호출이 끝난 후 함수에서 추가 연산을 요구하지 않도록 구현하는 재귀의 형태입니다. 컴파일러는 더 이상 값이 변할 여지가 없으므로 스택을 덮어쓸 수 있기 때문에 기존의 쌓이는 스택을 내부 알고리즘으로 스택을 선형으로 처리하도록 합니다.
+
+```
+function factorial(n) {
+    if (n === 1) {
+        return 1;
+    }
+    return n * factorial(n-1);
+}
+출처: https://joooing.tistory.com/entry/재귀-→-꼬리-재귀-Tail-Recursion [joooing:티스토리]
+```
+> 일반 재귀 방식의 코드
+
+```
+function factorial(n, total = 1){
+    if(n === 1){
+        return total;
+    }
+    return factorial(n - 1, n * total);
+}
+출처: https://joooing.tistory.com/entry/재귀-→-꼬리-재귀-Tail-Recursion [joooing:티스토리]
+```
+> 꼬리 재귀 방식의 코드
+
+※꼬리 재귀 방식의 코드를 보면 내부의 연산없이 마지막 호출(꼬리)에서 바로 결과값을 return 하기 때문에 꼬리 재귀라고 합니다.
+
+출처: https://bentist.tistory.com/57
+
+https://ko.wikipedia.org/wiki/%EC%8A%A4%ED%83%9D_%EC%98%A4%EB%B2%84%ED%94%8C%EB%A1%9C
+
+https://bozeury.tistory.com/entry/%EA%BC%AC%EB%A6%AC-%EC%9E%AC%EA%B7%80-%EC%B5%9C%EC%A0%81%ED%99%94Tail-Recursion
+
+https://velog.io/@dldhk97/%EC%9E%AC%EA%B7%80%ED%95%A8%EC%88%98%EC%99%80-%EA%BC%AC%EB%A6%AC-%EC%9E%AC%EA%B7%80
+
+https://serynana.tistory.com/entry/iOS-%EC%BB%B4%ED%8C%8C%EC%9D%BC-%EC%B5%9C%EC%A0%81%ED%99%94-feat-%EA%BC%AC%EB%A6%AC%EC%9E%AC%EA%B7%80
+
+https://leonfather.tistory.com/7
 
 ### **12. MST가 무엇이고, 어떻게 구할 수 있을지 설명해 주세요.**
 
@@ -219,6 +269,8 @@ https://jooyoung1121.github.io/cs/data%20structure/sort/
 
 그리디 알고리즘: 선택의 순간마다 당장 눈앞에 보이는 최적의 상황만을 쫒아 최종적인 해달에 도달하는 알고리즘 설계 기법입니다. 그것이 지역적으로 봤을 때는 최적일 수 있지만 전역적으로는 최적의 해가 되는지를 보장할 수 없습니다. 예를 들면 1-1-1-100과 1-1-10-10 중 모든 값의 합이 더 작은 것을 찾을 때 그리디 알고리즘은 1-1-1-100이 라는 값이 제일 작다고 판단하지만 실제로는 1-1-10-10이 더 작습니다.
 
+동적 계획법은 해를 찾기 위해 가능한 모든 방법을 고려해야 해서 상대적으로 느리지만 그 결과는 최적의 해이며, 그리디 알고리즘은 빠르게 최적에 근사한 값을 도출할 수 있다는 차이가 있습니다.
+
 - **그렇다면, 어떤 경우에 각각의 기법을 사용할 수 있을까요?**
 
 동적 계획법: 피보나치 수열과 같이 큰 문제를 작은 하위의 문제로 나눌 수 있는 경우에 사용할 수 있습니다.
@@ -232,3 +284,13 @@ https://jooyoung1121.github.io/cs/data%20structure/sort/
 출처: https://namu.wiki/w/%EB%8F%99%EC%A0%81%20%EA%B3%84%ED%9A%8D%EB%B2%95
 
 https://80000coding.oopy.io/60c3d4d3-f569-4b47-bdde-9a65d30f3bc5
+
+https://hanamon.kr/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%ED%83%90%EC%9A%95%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-greedy-algorithm/
+
+https://velog.io/@boyeon_jeong/%EB%8F%99%EC%A0%81%EA%B3%84%ED%9A%8D%EB%B2%95Dynamic-Programming
+
+https://galid1.tistory.com/507
+
+https://hongjw1938.tistory.com/47
+
+https://adjh54.tistory.com/212

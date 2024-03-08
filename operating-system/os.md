@@ -54,6 +54,8 @@ https://jhkimmm.tistory.com/3
 
 https://neos518.tistory.com/115
 
+https://codybuilder.com/41
+
 ### **2. 인터럽트가 무엇인지 설명해 주세요.**
 
 - **인터럽트는 어떻게 처리하나요?**
