@@ -161,8 +161,6 @@ https://velog.io/@gparkkii/ProgramProcessThread
 
 https://zangzangs.tistory.com/108
 
-
-
 ### **4. 프로세스 주소공간에 대해 설명해 주세요.**
 
 - **프로세스의 4가지 영역은 무엇인가요?**
@@ -303,8 +301,27 @@ JAVA:
 
 ### **11. IPC가 무엇이고, 어떤 종류가 있는지 설명해 주세요.**
 
+&nbsp;IPC(Inter Process Communication)는 프로세스 간에 발생하는 통신입니다. 일반적으로 프로세스는 독립된 메모리 공간을 할당받아 서로의 영역에 접근할 수 없습니다. 하지만, 현대의 애플리케이션에는 여러 프로세스가 실행되는 경우가 많으며 내부적으로 소통하며 작업을 해야 사용자가 원하는 결과를 주게 됩니다. 이를 위해 커널 영역에서 IPC를 제공하게 됩니다.
+
+종류: 공유 메모리, 파이프, 소켓, 메시지 큐, 메모리 맵 RPC가 있습니다.
+
 - **Shared Memory가 무엇이며, 사용할 때 유의해야 할 점에 대해 설명해 주세요.**
+
+&nbsp;공유 메모리란 여러 프로세스가 공동으로 사용하는 메모리 영역입니다. 프로세스가 공유 메모리 할당을 커널에 요청하면 커널이 메모리 공간을 할당해 줍니다. 중간 매개체 없이 직접 메모리에 접근하여 데이터 자체를 공유하기 때문에 모든 IPC 중에서 가장 빠릅니다. 하지만, 여러 프로세스에서 접근할 수 있기 때문에 적절한 데이터 동기화가 필요합니다.
+
 - **메시지 큐는 단방향이라고 할 수 있나요?**
+
+&nbsp;메시지 큐는 큐 자료구조를 이용한 IPC 기법입니다. A라는 프로세스에서 데이터를 insert하면 B라는 프로세스에서 받아오는 방식으로 통신합니다. 큐 자료구조는 FIFO의 구조이기 때문에 단방향 통신만 가능합니다. 하지만, 두 개의 메시지 큐를 사용하면 양방향 통신이 가능하기 때문에 양방향이라고 볼 수 있습니다. 
+
+출처: https://dar0m.tistory.com/233
+
+https://velog.io/@xx0hn/CS-OS-%EA%B3%B5%EC%9C%A0-%EB%A9%94%EB%AA%A8%EB%A6%AC-Shared-Memory
+
+https://devraphy.tistory.com/173
+
+https://gyoogle.dev/blog/computer-science/operating-system/IPC.html
+
+https://yaelimeee.tistory.com/56
 
 ### **12. Thread Safe 하다는 것은 어떤 의미인가요?**
 
