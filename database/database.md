@@ -88,4 +88,46 @@
 
 ### **16. SQL Injection에 대해 설명해 주세요.**
 
+&nbsp;악의적인 사용자가 응용 프로그램의 보안상의 취약점을 이용하여, 임의의 SQL문을 주입하고 실행되게 하여 DB가 비정상적인 동작을 하도록 조작하는 행위입니다.
+
+종류로는
+
+> Error Based SQL Injection
+
+> UNION based SQL Injection
+
+> Blind SQL Injection
+
+> Stored Procedure SQL Injection
+
+> Mass SQL Injection
+
+등이 있습니다.
+
 - **그렇다면, 우리가 서버 개발 과정에서 사용하는 수많은 DB 라이브러리들은 이 문제를 어떻게 해결할까요?**
+
+SQL Injection을 방지하는 방법에는
+
+> Prepared Statements 사용
+
+> Stored Procedures 사용
+
+> ORM 사용
+
+> Error Message 노출 금지
+
+> 웹 방화벽 사용
+
+> 입력 검증 및 새니타이징
+
+> 최소 권한의 데이터베이스 계정 사용
+
+등이 있습니다. 이중 대부분의 현대 DB 라이브러리와 프레임워크는 Prepared Statements를 사용하며, ORM 기능을 통해 개발자가 보다 안전하게 데이터베이스와 상호 작용할 수 있도록 합니다.
+
+출처: https://blog.cobalt.run/posts/basic-web-hacking(웹 해킹)
+
+https://velog.io/@jinyr1128/1%EC%9B%94-11%EC%9D%BC-SQL-Injection
+
+https://charming-kyu.tistory.com/18
+
+
